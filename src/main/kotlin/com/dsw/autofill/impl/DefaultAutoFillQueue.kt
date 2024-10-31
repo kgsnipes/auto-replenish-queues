@@ -7,13 +7,12 @@ import java.util.concurrent.Semaphore
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
-class DefaultAutoFillQueue(val batchSize:Int):AutoFillQueue<Any> {
+class DefaultAutoFillQueue(private val batchSize:Int,private var fetcher: ObjectFetcher<*>):AutoFillQueue<Any> {
 
     private val concurrentQueue= ConcurrentLinkedQueue<Any>()
     private val isReplenishing= AtomicBoolean(false)
     private val lock= Semaphore(1)
     private val totalCount= AtomicInteger(0)
-    private var fetcher:ObjectFetcher<Any>?=null
 
     override fun take(): Any? {
         val values=take(1)
