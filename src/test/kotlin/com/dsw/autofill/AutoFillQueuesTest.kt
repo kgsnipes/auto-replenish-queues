@@ -26,6 +26,28 @@ class AutoFillQueuesTest {
         Assertions.assertEquals(counterValue+1,counterValuePlusOne)
     }
 
+    @Test
+    fun `test02`()
+    {
+        val queues=DefaultAutoFillQueues()
+
+        queues.addQueue("bucket3",DefaultAutoFillQueue(1000,createIdentifierObjectFetcher("test-id-bucket-3")),500)
+        queues.addQueue("bucket4",DefaultAutoFillQueue(1000,createIdentifierObjectFetcher("test-id-bucket-4")),500)
+
+        Assertions.assertEquals(600,queues.take("bucket3",600).size)
+        Assertions.assertEquals(600,queues.take("bucket4",600).size)
+        Thread.sleep(10000)
+        Assertions.assertEquals(600,queues.take("bucket3",600).size)
+        Assertions.assertEquals(600,queues.take("bucket4",600).size)
+        Thread.sleep(10000)
+        Assertions.assertEquals(600,queues.take("bucket3",600).size)
+        Assertions.assertEquals(600,queues.take("bucket4",600).size)
+
+        val counterValue=(queues.take("bucket3") as String).toLong()
+        val counterValuePlusOne=(queues.take("bucket3") as String).toLong()
+        Assertions.assertEquals(counterValue+1,counterValuePlusOne)
+    }
+
     private fun createIdentifierObjectFetcher(bucket:String): ObjectFetcher<String> {
         return object: ObjectFetcher<String> {
             val okHttpClient= OkHttpClient()

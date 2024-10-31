@@ -25,13 +25,14 @@ class DefaultAutoFillQueues:AutoFillQueues<AutoFillQueue<*>> {
     }
 
     private fun isThreadDead(replenishThread: Thread?): Boolean {
-        return replenishThread ==null || replenishThread.isAlive || replenishThread.isInterrupted
+        return replenishThread ==null || !replenishThread.isAlive || replenishThread.isInterrupted
     }
 
     fun initBackgroundThread()
     {
         if(isThreadDead(replenishThread))
         {
+            log.info("Starting the background thread")
             replenishThread=getBackgroundReplenishmentThread()
             replenishThread?.start()
         }
@@ -46,8 +47,8 @@ class DefaultAutoFillQueues:AutoFillQueues<AutoFillQueue<*>> {
                 try {
                     if(queueToCheckForReplenishment.isNotEmpty())
                     {
-                        queueToCheckForReplenishment.forEach { que->
-                            if(queueMap.contains(que))
+                        queueToCheckForReplenishment.toList().forEach { que->
+                            if(queueMap.containsKey(que))
                             {
                                 val queue=queueMap[que]
                                 if(queue!=null)
@@ -55,14 +56,16 @@ class DefaultAutoFillQueues:AutoFillQueues<AutoFillQueue<*>> {
                                     val threshold=replenishmentThresholdMap[que]?:queue.getBatchSize()
                                     if(queue.size()<threshold)
                                     {
+                                        log.info("The threshold went down for $que , trying to replenish..")
                                         queue.replenish()
                                     }
                                 }
-
+                                queueToCheckForReplenishment.remove(que)
                             }
-                            queueToCheckForReplenishment.remove(que)
+
                         }
                     }
+                    log.info("Background thread taking a nap!!")
                     sleep(Random(1000).nextLong(5000))
                 }catch (e:Exception)
                 {
