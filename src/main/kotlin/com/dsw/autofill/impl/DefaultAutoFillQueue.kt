@@ -70,18 +70,16 @@ class DefaultAutoFillQueue(private val batchSize:Int,private var fetcher: Object
         try {
             lock.acquire(1)
             isReplenishing.set(true)
-            if(fetcher!=null)
+            val objects=fetcher.fetchObjects(count)
+            if(objects.isNotEmpty())
             {
-                val objects=fetcher!!.fetchObjects(count)
-                if(objects.isNotEmpty())
-                {
-                    objects.forEach {
-                        concurrentQueue.offer(it)
-                        totalCount.addAndGet(1)
-                    }
-
+                objects.forEach {
+                    concurrentQueue.offer(it)
+                    totalCount.addAndGet(1)
                 }
+
             }
+
         }
         finally {
             lock.release(1)
