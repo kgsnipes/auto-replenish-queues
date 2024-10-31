@@ -1,6 +1,7 @@
 package com.dsw.autofill
 
 import com.dsw.autofill.impl.DefaultAutoFillQueue
+import com.dsw.autofill.impl.DefaultAutoFillQueues
 import com.google.gson.Gson
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
@@ -8,24 +9,27 @@ import okhttp3.Request
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
-class AutoFillQueueTest {
-
+class AutoFillQueuesTest {
     @Test
     fun `test01`()
     {
-        val autoFillQueue=DefaultAutoFillQueue(1000,createIdentifierObjectFetcher("test-id-bucket"))
-        Assertions.assertEquals(1000,autoFillQueue.take(1000).size)
-        Assertions.assertEquals(1000,autoFillQueue.take(1000).size)
-        Assertions.assertEquals(100,autoFillQueue.take(100).size)
-        val counterValue=(autoFillQueue.take() as String).toLong()
-        val counterValuePlusOne=(autoFillQueue.take() as String).toLong()
+        val queues=DefaultAutoFillQueues()
+
+        queues.addQueue("bucket1",DefaultAutoFillQueue(1000,createIdentifierObjectFetcher("test-id-bucket-1")),500)
+        queues.addQueue("bucket2",DefaultAutoFillQueue(1000,createIdentifierObjectFetcher("test-id-bucket-2")),500)
+
+        Assertions.assertEquals(100,queues.take("bucket1",100).size)
+        Assertions.assertEquals(100,queues.take("bucket2",100).size)
+
+        val counterValue=(queues.take("bucket1") as String).toLong()
+        val counterValuePlusOne=(queues.take("bucket1") as String).toLong()
         Assertions.assertEquals(counterValue+1,counterValuePlusOne)
     }
 
     private fun createIdentifierObjectFetcher(bucket:String): ObjectFetcher<String> {
         return object: ObjectFetcher<String> {
-            val okHttpClient=OkHttpClient()
-            val gson=Gson()
+            val okHttpClient= OkHttpClient()
+            val gson= Gson()
             override fun fetchObjects(count:Int):List<String>{
                 val list= mutableListOf<String>()
                 val url="http://localhost:9000/id-service/id/$bucket"
@@ -47,6 +51,5 @@ class AutoFillQueueTest {
             }
         }
     }
-
     data class IDServiceResponse(var id:List<String>)
 }

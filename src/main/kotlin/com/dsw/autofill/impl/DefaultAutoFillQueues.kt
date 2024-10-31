@@ -78,10 +78,16 @@ class DefaultAutoFillQueues:AutoFillQueues<AutoFillQueue<*>> {
         replenishmentThresholdMap[key]=replenishThreshold
     }
 
-    override fun getObjects(key: String, count: Int): List<*> {
+    override fun take(key: String, count: Int): List<*> {
         initBackgroundThread()
         queueToCheckForReplenishment.add(key)
         return getQueue(key)!!.take(count)
+    }
+
+    override fun take(key: String): Any? {
+        initBackgroundThread()
+        queueToCheckForReplenishment.add(key)
+        return getQueue(key)!!.take()
     }
 
     override fun isQueueAvailable(key: String): Boolean {
