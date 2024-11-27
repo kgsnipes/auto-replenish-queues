@@ -1,4 +1,4 @@
-package com.dsw.autofill
+package com.dws.autofill
 
 interface AutoFillQueue<T> {
 
@@ -7,7 +7,7 @@ interface AutoFillQueue<T> {
     fun replenish()
     fun replenish(count:Int)
     fun isReplenishing():Boolean
-    fun setObjectFetcher(fetcher:ObjectFetcher<T>)
+    fun setObjectFetcher(fetcher: ObjectFetcher<T>)
     fun size():Int
     fun getBatchSize():Int
 }

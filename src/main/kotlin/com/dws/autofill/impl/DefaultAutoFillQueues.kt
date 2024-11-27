@@ -1,17 +1,17 @@
-package com.dsw.autofill.impl
+package com.dws.autofill.impl
 
-import com.dsw.autofill.AutoFillQueue
-import com.dsw.autofill.AutoFillQueues
+import com.dws.autofill.AutoFillQueue
+import com.dws.autofill.AutoFillQueues
 import org.slf4j.LoggerFactory
 import java.lang.Thread.sleep
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.thread
 import kotlin.random.Random
 
-class DefaultAutoFillQueues:AutoFillQueues<AutoFillQueue<*>> {
+class DefaultAutoFillQueues: AutoFillQueues<AutoFillQueue<*>> {
     companion object
     {
-        private val queueMap= ConcurrentHashMap<String,AutoFillQueue<*>>()
+        private val queueMap= ConcurrentHashMap<String, AutoFillQueue<*>>()
         private val replenishmentThresholdMap= ConcurrentHashMap<String,Int>()
         private val queueToCheckForReplenishment=HashSet<String>()
         private var replenishThread:Thread?=null
@@ -33,7 +33,7 @@ class DefaultAutoFillQueues:AutoFillQueues<AutoFillQueue<*>> {
         if(isThreadDead(replenishThread))
         {
             log.info("Starting the background thread")
-            replenishThread=getBackgroundReplenishmentThread()
+            replenishThread =getBackgroundReplenishmentThread()
             replenishThread?.start()
         }
     }
@@ -50,10 +50,10 @@ class DefaultAutoFillQueues:AutoFillQueues<AutoFillQueue<*>> {
                         queueToCheckForReplenishment.toList().forEach { que->
                             if(queueMap.containsKey(que))
                             {
-                                val queue=queueMap[que]
+                                val queue= queueMap[que]
                                 if(queue!=null)
                                 {
-                                    val threshold=replenishmentThresholdMap[que]?:queue.getBatchSize()
+                                    val threshold= replenishmentThresholdMap[que]?:queue.getBatchSize()
                                     if(queue.size()<threshold)
                                     {
                                         log.info("The threshold went down for $que , trying to replenish..")
@@ -76,7 +76,7 @@ class DefaultAutoFillQueues:AutoFillQueues<AutoFillQueue<*>> {
         })
     }
 
-    override fun addQueue(key: String, queue:AutoFillQueue<*>,replenishThreshold:Int) {
+    override fun addQueue(key: String, queue: AutoFillQueue<*>, replenishThreshold:Int) {
         queueMap[key]=queue
         replenishmentThresholdMap[key]=replenishThreshold
     }

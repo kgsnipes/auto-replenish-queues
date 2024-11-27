@@ -1,6 +1,6 @@
-package com.dsw.autofill
+package com.dws.autofill
 
-import com.dsw.autofill.impl.DefaultAutoFillQueue
+import com.dws.autofill.impl.DefaultAutoFillQueue
 import com.google.gson.Gson
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
@@ -14,7 +14,7 @@ class AutoFillQueueTest {
     @Test
     fun `test01`()
     {
-        val autoFillQueue=DefaultAutoFillQueue(1000,createIdentifierObjectFetcher("test-id-bucket"))
+        val autoFillQueue= DefaultAutoFillQueue(1000,createIdentifierObjectFetcher("test-id-bucket"))
         Assertions.assertEquals(1000,autoFillQueue.take(1000).size)
         Assertions.assertEquals(1000,autoFillQueue.take(1000).size)
         Assertions.assertEquals(100,autoFillQueue.take(100).size)
@@ -70,7 +70,7 @@ class AutoFillQueueTest {
     @Test
     fun `test02`()
     {
-        val autoFillQueue=DefaultAutoFillQueue(1000,createSimpleObjectFetcher())
+        val autoFillQueue= DefaultAutoFillQueue(1000,createSimpleObjectFetcher())
         Assertions.assertEquals(1000,autoFillQueue.take(1000).size)
         Assertions.assertEquals(1000,autoFillQueue.take(1000).size)
         Assertions.assertEquals(100,autoFillQueue.take(100).size)

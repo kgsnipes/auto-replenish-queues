@@ -1,13 +1,13 @@
-package com.dsw.autofill.impl
+package com.dws.autofill.impl
 
-import com.dsw.autofill.AutoFillQueue
-import com.dsw.autofill.ObjectFetcher
+import com.dws.autofill.AutoFillQueue
+import com.dws.autofill.ObjectFetcher
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.Semaphore
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
-class DefaultAutoFillQueue(private val batchSize:Int,private var fetcher: ObjectFetcher<*>):AutoFillQueue<Any> {
+class DefaultAutoFillQueue(private val batchSize:Int,private var fetcher: ObjectFetcher<*>): AutoFillQueue<Any> {
 
     private val concurrentQueue= ConcurrentLinkedQueue<Any>()
     private val isReplenishing= AtomicBoolean(false)

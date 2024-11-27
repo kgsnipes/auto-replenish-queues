@@ -1,7 +1,7 @@
-package com.dsw.autofill
+package com.dws.autofill
 
-import com.dsw.autofill.impl.DefaultAutoFillQueue
-import com.dsw.autofill.impl.DefaultAutoFillQueues
+import com.dws.autofill.impl.DefaultAutoFillQueue
+import com.dws.autofill.impl.DefaultAutoFillQueues
 import com.google.gson.Gson
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
@@ -13,10 +13,10 @@ class AutoFillQueuesTest {
     @Test
     fun `test01`()
     {
-        val queues=DefaultAutoFillQueues()
+        val queues= DefaultAutoFillQueues()
 
-        queues.addQueue("bucket1",DefaultAutoFillQueue(1000,createIdentifierObjectFetcher("test-id-bucket-1")),500)
-        queues.addQueue("bucket2",DefaultAutoFillQueue(1000,createIdentifierObjectFetcher("test-id-bucket-2")),500)
+        queues.addQueue("bucket1", DefaultAutoFillQueue(1000,createIdentifierObjectFetcher("test-id-bucket-1")),500)
+        queues.addQueue("bucket2", DefaultAutoFillQueue(1000,createIdentifierObjectFetcher("test-id-bucket-2")),500)
 
         Assertions.assertEquals(100,queues.take("bucket1",100).size)
         Assertions.assertEquals(100,queues.take("bucket2",100).size)
@@ -29,10 +29,10 @@ class AutoFillQueuesTest {
     @Test
     fun `test02`()
     {
-        val queues=DefaultAutoFillQueues()
+        val queues= DefaultAutoFillQueues()
 
-        queues.addQueue("bucket3",DefaultAutoFillQueue(1000,createIdentifierObjectFetcher("test-id-bucket-3")),500)
-        queues.addQueue("bucket4",DefaultAutoFillQueue(1000,createIdentifierObjectFetcher("test-id-bucket-4")),500)
+        queues.addQueue("bucket3", DefaultAutoFillQueue(1000,createIdentifierObjectFetcher("test-id-bucket-3")),500)
+        queues.addQueue("bucket4", DefaultAutoFillQueue(1000,createIdentifierObjectFetcher("test-id-bucket-4")),500)
 
         Assertions.assertEquals(600,queues.take("bucket3",600).size)
         Assertions.assertEquals(600,queues.take("bucket4",600).size)
