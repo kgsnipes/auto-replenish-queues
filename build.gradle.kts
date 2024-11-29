@@ -32,7 +32,7 @@ kotlin {
 }
 
 tasks.create("fatJar", Jar::class) {
-    group = "com.dsw.autofill" // OR, for example, "build"
+    group = "com.dsw" // OR, for example, "build"
     description = "auto_fill_queues"
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     val dependencies = configurations
