@@ -55,8 +55,10 @@ class DefaultAutoFillQueue(private val batchSize:Int,private var fetcher: Object
             val mutableList= mutableListOf<Any>()
             for(i in 1..count)
             {
-                totalCount.decrementAndGet()
-                mutableList.add(concurrentQueue.poll())
+                if(concurrentQueue.isNotEmpty()) {
+                    totalCount.decrementAndGet()
+                    mutableList.add(concurrentQueue.poll())
+                }
             }
             mutableList
         }
@@ -75,7 +77,7 @@ class DefaultAutoFillQueue(private val batchSize:Int,private var fetcher: Object
             {
                 objects.forEach {
                     concurrentQueue.offer(it)
-                    totalCount.addAndGet(1)
+                    totalCount.incrementAndGet()
                 }
 
             }
